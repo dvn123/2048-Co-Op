@@ -26,6 +26,7 @@ KeyboardInputManager.prototype.emit = function (event, data) {
     var callbacks = this.events[event];
     if (callbacks) {
         callbacks.forEach(function (callback) {
+
             callback(data);
         });
     }
@@ -58,7 +59,7 @@ KeyboardInputManager.prototype.listen = function () {
         if (!modifiers) {
             if (mapped !== undefined) {
                 event.preventDefault();
-                self.emit("move", mapped);
+                self.emit("request_move", mapped);
             }
         }
 
@@ -70,7 +71,6 @@ KeyboardInputManager.prototype.listen = function () {
 
     // Respond to button presses
     this.bindButtonPress(".retry-button", this.restart);
-    this.bindButtonPress(".restart-button", this.restart);
     this.bindButtonPress(".keep-playing-button", this.keepPlaying);
 
     // Respond to swipe events
@@ -122,7 +122,7 @@ KeyboardInputManager.prototype.listen = function () {
 
         if (Math.max(absDx, absDy) > 10) {
             // (right : left) : (down : up)
-            self.emit("move", absDx > absDy ? (dx > 0 ? 1 : 3) : (dy > 0 ? 2 : 0));
+            self.emit("request_move", absDx > absDy ? (dx > 0 ? 1 : 3) : (dy > 0 ? 2 : 0));
         }
     });
 };

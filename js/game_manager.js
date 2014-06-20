@@ -2,14 +2,23 @@ function GameManager(size, InputManager, Actuator) {
     this.size = size; // Size of the grid
     this.inputManager = new InputManager;
     this.actuator = new Actuator;
-
+    this.socket = io.connect('http://localhost:80');
     this.startTiles = 2;
+    var self = this;
 
-    this.inputManager.on("move", this.move.bind(this));
+    this.socket.on('game-state', function(game_state) {
+        self.setup(game_state);
+    });
+    this.socket.on('move', function(direction) {
+        self.move(direction);
+    });
+    //this.socket.on('democracy-vote');
+
+    this.socket.emit('get-game-state');
+
+    this.inputManager.on("request_move", this.request_move.bind(this));
     this.inputManager.on("restart", this.restart.bind(this));
     this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
-
-    this.setup();
 }
 
 // Restart the game
@@ -31,37 +40,23 @@ GameManager.prototype.isGameTerminated = function () {
 };
 
 // Set up the game
-GameManager.prototype.setup = function () {
-    //var previousState = this.storageManager.getGameState();
-
-    // Reload the game from a previous game if present
-    /*if (previousState) {
-     this.grid        = new Grid(previousState.grid.size,
-     previousState.grid.cells); // Reload grid
-     this.score       = previousState.score;
-     this.over        = previousState.over;
-     this.won         = previousState.won;
-     this.keepPlaying = previousState.keepPlaying;
-     } else {
-     this.grid        = new Grid(this.size);
-     this.score       = 0;
-     this.over        = false;
-     this.won         = false;
-     this.keepPlaying = false;
-
-     // Add the initial tiles
-     this.addStartTiles();
-     }*/
-
-    this.grid = new Grid(this.size);
-    this.score = 0;
-    this.over = false;
-    this.won = false;
-    this.keepPlaying = false;
-
-    // Add the initial tiles
-    this.addStartTiles();
-
+GameManager.prototype.setup = function (game_state) {
+    // Get previous game from server if present
+    if (game_state != null) {
+        this.grid = new Grid(game_state.grid.size, game_state.grid.cells); // Reload grid
+        this.score = game_state.score;
+        this.over = game_state.over;
+        this.won = game_state.won;
+        this.keepPlaying = game_state.keepPlaying;
+    } else {
+        this.grid = new Grid(this.size);
+        this.score = 0;
+        this.over = false;
+        this.won = false;
+        this.keepPlaying = false;
+        // Add the initial tiles
+        this.addStartTiles();
+    }
     // Update the actuator
     this.actuate();
 };
@@ -125,6 +120,11 @@ GameManager.prototype.moveTile = function (tile, cell) {
     this.grid.cells[tile.x][tile.y] = null;
     this.grid.cells[cell.x][cell.y] = tile;
     tile.updatePosition(cell);
+};
+
+GameManager.prototype.request_move = function(direction) {
+    var self = this;
+    this.socket.emit('move', direction, self.grid.serialize());
 };
 
 // Move tiles on the grid in the specified direction
