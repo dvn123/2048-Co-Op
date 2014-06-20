@@ -30,7 +30,6 @@ GameManager.prototype.isGameTerminated = function () {
 // Set up the game
 GameManager.prototype.setup = function () {
     this.grid = new Grid(this.size);
-    this.score = 0;
     this.over = false;
     this.won = false;
     this.keepPlaying = false;
@@ -102,9 +101,6 @@ GameManager.prototype.move = function (direction) {
 
                     // Converge the two tiles" positions
                     tile.updatePosition(positions.next);
-
-                    // Update the score
-                    self.score += merged.value;
 
                     // The mighty 2048 tile
                     if (merged.value === 2048) self.won = true;
@@ -199,7 +195,6 @@ GameManager.prototype.positionsEqual = function (first, second) {
 GameManager.prototype.serialize = function () {
     return {
         grid: this.grid.serialize(),
-        score: this.score,
         over: this.over,
         won: this.won,
         keepPlaying: this.keepPlaying

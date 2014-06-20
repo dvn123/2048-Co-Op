@@ -6,20 +6,30 @@ function GameManager(size, InputManager, Actuator) {
     this.startTiles = 2;
     var self = this;
 
-    this.socket.on("game-state", function(game_state) {
-        self.setup(game_state);
+    this.socket.on("gameState", function(gameState) {
+        self.setup(gameState);
     });
     this.socket.on("move", function(direction, rTile) {
         self.move(direction, rTile);
     });
     //this.socket.on("democracy-vote");
 
-    this.socket.emit("get-game-state");
+    this.socket.emit("getGameState");
 
-    this.inputManager.on("request_move", this.request_move.bind(this));
-    this.inputManager.on("restart", this.restart.bind(this));
-    this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
+    this.inputManager.on("requestMove", this.requestMove.bind(this));
+    this.inputManager.on("anarchyVote", this.anarchyVote.bind(this));
+    this.inputManager.on("democracyVote", this.democracyVote.bind(this));
 }
+
+// Vote for democracy mode
+GameManager.prototype.democracyVote = function() {
+    this.socket.emit("democracyVote");
+};
+
+// Vote for anarchy mode
+GameManager.prototype.anarchyVote = function() {
+    this.socket.emit("anarchyVote");
+};
 
 // Restart the game
 GameManager.prototype.restart = function () {
@@ -40,14 +50,16 @@ GameManager.prototype.isGameTerminated = function () {
 };
 
 // Set up the game
-GameManager.prototype.setup = function (game_state) {
+GameManager.prototype.setup = function (gameState) {
     // Get previous game from server if present
-    if (game_state != null) {
-        this.grid = new Grid(game_state.grid.size, game_state.grid.cells); // Reload grid
-        this.score = game_state.score;
-        this.over = game_state.over;
-        this.won = game_state.won;
-        this.keepPlaying = game_state.keepPlaying;
+    if (gameState != null) {
+        this.grid = new Grid(gameState.grid.size, gameState.grid.cells); // Reload grid
+        this.over = gameState.over;
+        this.won = gameState.won;
+        this.keepPlaying = gameState.keepPlaying;
+        this.anarchyVotes = gameState.anarchyVotes;
+        this.democracyVotes = gameState.democracyVotes;
+        this.currentMode = gameState.currentMode;
     }
     // Update the actuator
     this.actuate();
@@ -61,7 +73,6 @@ GameManager.prototype.actuate = function () {
     }
 
     this.actuator.actuate(this.grid, {
-        score: this.score,
         over: this.over,
         won: this.won,
         terminated: this.isGameTerminated()
@@ -73,7 +84,6 @@ GameManager.prototype.actuate = function () {
 GameManager.prototype.serialize = function () {
     return {
         grid: this.grid.serialize(),
-        score: this.score,
         over: this.over,
         won: this.won,
         keepPlaying: this.keepPlaying
@@ -97,7 +107,7 @@ GameManager.prototype.moveTile = function (tile, cell) {
     tile.updatePosition(cell);
 };
 
-GameManager.prototype.request_move = function(direction) {
+GameManager.prototype.requestMove = function(direction) {
     var self = this;
     this.socket.emit("move", direction, self.grid.serialize());
 };
@@ -129,8 +139,6 @@ GameManager.prototype.move = function (direction, randoms) {
                     self.grid.removeTile(tile);
                     // Converge the two tiles" positions
                     tile.updatePosition(positions.next);
-                    // Update the score
-                    self.score += merged.value;
                     // The mighty 2048 tile
                     if (merged.value === 2048) self.won = true;
                 } else {

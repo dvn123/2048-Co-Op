@@ -15,6 +15,8 @@ $bright-text-color: #f9f6f2;
 $tile-color: #eee4da;
 $tile-gold-color: #edc22e;
 $tile-gold-glow-color: lighten($tile-gold-color, 15%);
+$democracy-color: #0068af;
+$anarchy-color: #F2555C;
 
 $game-container-margin-top: 40px;
 $game-container-background: #bbada0;
@@ -165,6 +167,12 @@ hr {
   color: $bright-text-color;
   height: 40px;
   line-height: 42px;
+}
+
+@mixin mode-button {
+  display: block;
+  margin-top: 1%;
+  text-align: center;
 }
 
 // Game field mixin used to render CSS at different width
@@ -461,11 +469,39 @@ hr {
   margin-bottom: 0;
 }
 
-.restart-button {
+.democracy-button {
   @include button;
+  @include mode-button;
+  width: 32%;
+  padding: 0;
   display: block;
-  text-align: center;
+  box-sizing: border-box;
+  background-color: $democracy-color;
   float: right;
+}
+.anarchy-button {
+  @include button;
+  @include mode-button;
+  width: 32%;
+  margin-right: 1%;
+  padding: 0;
+  display: block;
+  box-sizing: border-box;
+  background-color: $anarchy-color;
+  float: left;
+}
+
+.current-mode  {
+  @include button;
+  @include mode-button;
+  display: block;
+  visibility: hidden;
+  background-color: $anarchy-color;
+  width: 34%;
+  margin-right: 1%;
+  padding: 0;
+  box-sizing: border-box;
+  float: left;
 }
 
 .game-explanation {
