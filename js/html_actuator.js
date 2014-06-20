@@ -1,6 +1,7 @@
 function HTMLActuator() {
     this.tileContainer = document.querySelector(".tile-container");
     this.messageContainer = document.querySelector(".game-message");
+    this.modeContainer = document.querySelector(".current-mode");
 }
 
 HTMLActuator.prototype.actuate = function (grid, metadata) {
@@ -94,6 +95,19 @@ HTMLActuator.prototype.normalizePosition = function (position) {
 HTMLActuator.prototype.positionClass = function (position) {
     position = this.normalizePosition(position);
     return "tile-position-" + position.x + "-" + position.y;
+};
+
+HTMLActuator.prototype.updateCurrentMode = function (mode) {
+    if(mode == "Anarchy")
+        this.modeContainer.style.backgroundColor = anarchy_color;
+    else
+        this.modeContainer.style.backgroundColor = democracy_color;
+
+    this.modeContainer.textContent = mode;
+};
+
+HTMLActuator.prototype.updateDemocracyVotes = function (mode) {
+    this.modeContainer.textContent = mode;
 };
 
 

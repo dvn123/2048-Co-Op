@@ -12,6 +12,10 @@ function GameManager(size, InputManager, Actuator) {
     this.socket.on("move", function(direction, rTile) {
         self.move(direction, rTile);
     });
+    this.socket.on("gameMode", function(mode) {
+        console.log("New mode: " + mode);
+        self.actuator.updateCurrentMode(mode);
+    });
     //this.socket.on("democracy-vote");
 
     this.socket.emit("getGameState");
