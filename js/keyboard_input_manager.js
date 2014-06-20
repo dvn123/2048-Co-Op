@@ -59,7 +59,7 @@ KeyboardInputManager.prototype.listen = function () {
         if (!modifiers) {
             if (mapped !== undefined) {
                 event.preventDefault();
-                self.emit("request_move", mapped);
+                self.emit("requestMove", mapped);
             }
         }
 
@@ -70,8 +70,8 @@ KeyboardInputManager.prototype.listen = function () {
     });
 
     // Respond to button presses
-    this.bindButtonPress(".retry-button", this.restart);
-    this.bindButtonPress(".keep-playing-button", this.keepPlaying);
+    this.bindButtonPress(".democracy-button", this.democracyVote);
+    this.bindButtonPress(".anarchy-button", this.anarchyVote);
 
     // Respond to swipe events
     var touchStartClientX, touchStartClientY;
@@ -122,19 +122,19 @@ KeyboardInputManager.prototype.listen = function () {
 
         if (Math.max(absDx, absDy) > 10) {
             // (right : left) : (down : up)
-            self.emit("request_move", absDx > absDy ? (dx > 0 ? 1 : 3) : (dy > 0 ? 2 : 0));
+            self.emit("requestMove", absDx > absDy ? (dx > 0 ? 1 : 3) : (dy > 0 ? 2 : 0));
         }
     });
 };
 
-KeyboardInputManager.prototype.restart = function (event) {
+KeyboardInputManager.prototype.anarchyVote = function (event) {
     event.preventDefault();
-    this.emit("restart");
+    this.emit("anarchyVote");
 };
 
-KeyboardInputManager.prototype.keepPlaying = function (event) {
+KeyboardInputManager.prototype.democracyVote = function (event) {
     event.preventDefault();
-    this.emit("keepPlaying");
+    this.emit("democracyVote");
 };
 
 KeyboardInputManager.prototype.bindButtonPress = function (selector, fn) {
