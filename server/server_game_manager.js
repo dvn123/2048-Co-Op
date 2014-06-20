@@ -22,7 +22,7 @@ GameManager.prototype.keepPlaying = function () {
     this.keepPlaying = true;
 };
 
-// Return true if the game is lost, or has won and the user hasn't kept playing
+// Return true if the game is lost, or has won and the user hasn"t kept playing
 GameManager.prototype.isGameTerminated = function () {
     return this.over || (this.won && !this.keepPlaying);
 };
@@ -51,7 +51,7 @@ GameManager.prototype.addRandomTile = function () {
         var cell = this.grid.randomAvailableCell();
         var tile = new Tile(cell, value);
         this.grid.insertTile(tile);
-        return {'value':value, 'cell':cell};
+        return {"value":value, "cell":cell};
     }
     return null;
 };
@@ -77,7 +77,7 @@ GameManager.prototype.moveTile = function (tile, cell) {
 GameManager.prototype.move = function (direction) {
     // 0: up, 1: right, 2: down, 3: left
     var self = this;
-    if (this.isGameTerminated()) return; // Don't do anything if the game's over
+    if (this.isGameTerminated()) return; // Don"t do anything if the game"s over
     var cell, tile;
     var vector = this.getVector(direction);
     var traversals = this.buildTraversals(vector);
@@ -100,7 +100,7 @@ GameManager.prototype.move = function (direction) {
                     self.grid.insertTile(merged);
                     self.grid.removeTile(tile);
 
-                    // Converge the two tiles' positions
+                    // Converge the two tiles" positions
                     tile.updatePosition(positions.next);
 
                     // Update the score

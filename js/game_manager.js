@@ -6,15 +6,15 @@ function GameManager(size, InputManager, Actuator) {
     this.startTiles = 2;
     var self = this;
 
-    this.socket.on('game-state', function(game_state) {
+    this.socket.on("game-state", function(game_state) {
         self.setup(game_state);
     });
-    this.socket.on('move', function(direction, rTile) {
+    this.socket.on("move", function(direction, rTile) {
         self.move(direction, rTile);
     });
-    //this.socket.on('democracy-vote');
+    //this.socket.on("democracy-vote");
 
-    this.socket.emit('get-game-state');
+    this.socket.emit("get-game-state");
 
     this.inputManager.on("request_move", this.request_move.bind(this));
     this.inputManager.on("restart", this.restart.bind(this));
@@ -34,7 +34,7 @@ GameManager.prototype.keepPlaying = function () {
     this.actuator.continueGame(); // Clear the game won/lost message
 };
 
-// Return true if the game is lost, or has won and the user hasn't kept playing
+// Return true if the game is lost, or has won and the user hasn"t kept playing
 GameManager.prototype.isGameTerminated = function () {
     return this.over || (this.won && !this.keepPlaying);
 };
@@ -99,14 +99,14 @@ GameManager.prototype.moveTile = function (tile, cell) {
 
 GameManager.prototype.request_move = function(direction) {
     var self = this;
-    this.socket.emit('move', direction, self.grid.serialize());
+    this.socket.emit("move", direction, self.grid.serialize());
 };
 
 // Move tiles on the grid in the specified direction
 GameManager.prototype.move = function (direction, randoms) {
     // 0: up, 1: right, 2: down, 3: left
     var self = this;
-    if (this.isGameTerminated()) return; // Don't do anything if the game's over
+    if (this.isGameTerminated()) return; // Don"t do anything if the game"s over
     var cell, tile;
     var vector = this.getVector(direction);
     var traversals = this.buildTraversals(vector);
@@ -127,7 +127,7 @@ GameManager.prototype.move = function (direction, randoms) {
                     merged.mergedFrom = [tile, next];
                     self.grid.insertTile(merged);
                     self.grid.removeTile(tile);
-                    // Converge the two tiles' positions
+                    // Converge the two tiles" positions
                     tile.updatePosition(positions.next);
                     // Update the score
                     self.score += merged.value;
