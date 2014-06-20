@@ -106,10 +106,13 @@ HTMLActuator.prototype.updateCurrentMode = function (mode) {
     this.modeContainer.textContent = mode;
 };
 
-HTMLActuator.prototype.updateDemocracyVotes = function (mode) {
-    this.modeContainer.textContent = mode;
+HTMLActuator.prototype.updateDemocracyVotes = function (votes) {
+
 };
 
+HTMLActuator.prototype.updateAnarchyVotes = function (votes) {
+
+};
 
 HTMLActuator.prototype.message = function (won) {
     var type = won ? "game-won" : "game-over";
