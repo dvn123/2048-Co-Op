@@ -101,15 +101,12 @@ Grid.prototype.withinBounds = function (position) {
 
 Grid.prototype.serialize = function () {
     var cellState = [];
-
     for (var x = 0; x < this.size; x++) {
         var row = cellState[x] = [];
-
         for (var y = 0; y < this.size; y++) {
             row.push(this.cells[x][y] ? this.cells[x][y].serialize() : null);
         }
     }
-
     return {
         size: this.size,
         cells: cellState
