@@ -1,4 +1,4 @@
-var io = require('socket.io').listen(80, { log: false });
+var io = require('socket.io').listen(8080, { log: false });
 
 var game_manager = require('./server_game_manager.js');
 var game = new game_manager(4);
@@ -15,10 +15,9 @@ io.on('connection', function (socket) {
     });
 
     socket.on('move', function (direction, grid) {
-        if (game.getGrid() == grid) {
-            io.emit('move', direction);
-            game.move(direction);
-        }
+        var randoms = game.move(direction);
+        console.log(JSON.stringify(randoms, undefined, 2));
+        io.emit('move', direction, randoms);
     });
 });
 
