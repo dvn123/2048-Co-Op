@@ -1,12 +1,17 @@
 var io = require("socket.io").listen(8080, { log: false });
-var winston = require("winston"); //logger
+var log4js = require('log4js');
 
-var logger = new (winston.Logger)({
-    transports: [
-        //new (winston.transports.Console)(),
-        new (winston.transports.File)({ filename: "2048-Co-Op.log" })
-    ]
-});
+log4js.clearAppenders();
+log4js.loadAppender('file');
+log4js.addAppender(log4js.appenders.file('logs/Moves.log'), 'Move');
+log4js.addAppender(log4js.appenders.file('logs/D&A.log'), 'Democracy & Anarchy');
+log4js.addAppender(log4js.appenders.file('logs/User.log'), 'User');
+log4js.addAppender(log4js.appenders.file('logs/Synchronization.log'), 'Synchronization');
+
+var moveLogger = log4js.getLogger('Move');
+var daLogger = log4js.getLogger('Democracy & Anarchy');
+var userLogger = log4js.getLogger('User');
+var syncLogger = log4js.getLogger('Synchronization');
 
 var gameManager = require("./server_game_manager.js");
 var game = new gameManager(4);
@@ -16,7 +21,7 @@ const voteThrottle = 0; //Test Value
 const voteCounterInterval = 10000;
 const voteCounterDemocracyInterval = 5000;
 
-var currentMode = "anarchy";
+var currentMode = "Anarchy";
 var democracyVotes = 0;
 var anarchyVotes = 1;
 var voteThrottleCounter = {};
@@ -27,21 +32,27 @@ var userCount = 0;
 var voteCounterRun = setInterval(voteCounter, voteCounterInterval);
 var voteCounterDemocracyRun;
 
+moveLogger.debug('New Instance \n-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------');
+
 io.sockets.on("connection", function (socket) {
     userCount++;
+    userLogger.debug('Connect - UserCount:' + userCount + ', Author: ' + socket.id);
     socket.on("getGameState", function () {
         var game_state = game.getGameState();
         game_state["anarchyVotes"] = anarchyVotes;
         game_state["democracyVotes"] = democracyVotes;
-        game_state["currentMode"] = anarchyVotes;
-        socket.emit("gameState", game.getGameState());
+        game_state["currentMode"] = currentMode;
+        socket.emit("gameState", game_state);
+        syncLogger.debug('SentGameState - GameState:' + JSON.stringify(game_state) + ', Author: ' + socket.id);
     });
 
     socket.on("democracyVote", function () {
         if(checkVoteThrottle(socket.id)) {
             democracyVotes++;
             io.emit("democracyVote", democracyVotes);
-            //console.log("Democracy votes: " + democracyVotes);
+            daLogger.debug('Vote - DemocracyVotes:' + democracyVotes + ', Author: ' + socket.id);
+        } else {
+            daLogger.debug('VoteRejected - Author: ' + socket.id);
         }
     });
 
@@ -49,36 +60,43 @@ io.sockets.on("connection", function (socket) {
         if(checkVoteThrottle(socket.id)) {
             anarchyVotes++;
             io.emit("anarchyVote", anarchyVotes);
-            //console.log("Anarchy votes: " + anarchyVotes);
+            daLogger.debug('Vote - AnarchyVotes:' + anarchyVotes + ', Author: ' + socket.id);
+        } else {
+            daLogger.debug('VoteRejected - Author: ' + socket.id);
         }
     });
 
     socket.on("move", function (direction, grid) {
         if ((JSON.stringify(game.getGrid()) == JSON.stringify(grid))) {
-            if (currentMode == "anarchy") {
+            if (currentMode == "Anarchy") {
                 emitMove(direction, socket)
             } else {
                 democracyMoveVotes[direction]++;
-                logger.log("Democracy Move Vote", "Direction - " + direction + "Author - " + socket.id);
+                daLogger.debug('MoveVote - Direction:' + direction + ', Author: ' + socket.id);
             }
+        } else {
+            moveLogger.debug('MoveRejected  + \nClientGrid: ' + JSON.stringify(grid) + '\nServerGrid: ' + JSON.stringify(game.getGrid()) + ', Author: ' + socket.id);
         }
     });
 
     socket.on('disconnect', function() {
-        console.log(socket.id + ' disconnected');
         userCount--;
+        userLogger.debug('Disconnect - UserCount:' + userCount + ', Author: ' + socket.id);
     });
 });
 
 function emitMove(direction, socket) {
-    console.log("ASD - " + direction);
     var randoms = game.move(direction);
+    if(randoms == undefined)
+        randoms = null;
     io.emit("move", direction, randoms);
     if(socket == null) {
         socket = {};
         socket['id'] = "democracy";
     }
-    logger.log("Move", "Direction - " + direction + "Author - " + socket.id, game.getGrid());
+    if(randoms == null)
+        moveLogger.debug('Direction:' + direction + ', Random: Null, Author: ' + socket.id);
+    else moveLogger.debug('Direction:' + direction + ', RandomCell: ' + randoms.cell + ', RandomValue: ' + randoms.value + ', Author: ' + socket.id);
 }
 
 function checkVoteThrottle(socketId) {
@@ -101,9 +119,7 @@ function voteCounter() {
         currentMode = "Anarchy";
         clearInterval(voteCounterDemocracyRun);
     }
-    //console.log("Democracy Votes:" + democracyVotes);
-    //console.log("Anarchy Votes:" + anarchyVotes);
-    //console.log("New mode: " + currentMode);
+    daLogger.debug('NewMode - Mode:' + currentMode + ', AnarchyVotes: ' + anarchyVotes + ', democracyVotes' + democracyVotes);
     voteThrottleCounter = {};
     io.emit("gameMode", currentMode);
 }
@@ -117,6 +133,5 @@ function voteCounterDemocracy() {
     }
     if (move != -1)
         emitMove(move, null);
-    //console.log("Democracy Move: " + move);
     democracyMoveVotes = [0, 0, 0, 0];
 }

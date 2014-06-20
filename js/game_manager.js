@@ -4,15 +4,25 @@ function GameManager(size, InputManager, Actuator) {
     this.actuator = new Actuator;
     this.socket = io.connect(server_ip + server_port);
     this.startTiles = 2;
+    this.hasState = false;
     var self = this;
 
-    this.socket.on("gameState", function(gameState) {
-        self.setup(gameState);
+    this.socket.on("gameState", function (gameState) {
+        if (!self.hasState)
+            self.setup(gameState);
+        else {
+            if (!self.moved) {
+                if(JSON.stringify(gameState.grid) != JSON.stringify(self.grid.serialize())) {
+                    self.grid = new Grid(gameState.grid.size, gameState.grid.cells);
+                    self.actuate();
+                }
+            }
+        }
     });
-    this.socket.on("move", function(direction, rTile) {
+    this.socket.on("move", function (direction, rTile) {
         self.move(direction, rTile);
     });
-    this.socket.on("gameMode", function(mode) {
+    this.socket.on("gameMode", function (mode) {
         console.log("New mode: " + mode);
         self.actuator.updateCurrentMode(mode);
     });
@@ -25,13 +35,20 @@ function GameManager(size, InputManager, Actuator) {
     this.inputManager.on("democracyVote", this.democracyVote.bind(this));
 }
 
+GameManager.prototype.syncChecker = function () {
+    if(this.socket == undefined)
+        this.socket = io.connect(server_ip + server_port);
+    this.socket.emit("getGameState");
+    this.moved = false;
+};
+
 // Vote for democracy mode
-GameManager.prototype.democracyVote = function() {
+GameManager.prototype.democracyVote = function () {
     this.socket.emit("democracyVote");
 };
 
 // Vote for anarchy mode
-GameManager.prototype.anarchyVote = function() {
+GameManager.prototype.anarchyVote = function () {
     this.socket.emit("anarchyVote");
 };
 
@@ -55,6 +72,7 @@ GameManager.prototype.isGameTerminated = function () {
 
 // Set up the game
 GameManager.prototype.setup = function (gameState) {
+    this.hasState = true;
     // Get previous game from server if present
     if (gameState != null) {
         this.grid = new Grid(gameState.grid.size, gameState.grid.cells); // Reload grid
@@ -66,7 +84,11 @@ GameManager.prototype.setup = function (gameState) {
         this.currentMode = gameState.currentMode;
     }
     // Update the actuator
+    this.actuator.updateCurrentMode(this.currentMode);
+    this.actuator.updateDemocracyVotes(this.democracyVotes);
+    this.actuator.updateAnarchyVotes(this.anarchyVotes);
     this.actuate();
+    this.syncCheck = setInterval(this.syncChecker, sync_interval);
 };
 
 // Sends the updated grid to the actuator
@@ -111,7 +133,7 @@ GameManager.prototype.moveTile = function (tile, cell) {
     tile.updatePosition(cell);
 };
 
-GameManager.prototype.requestMove = function(direction) {
+GameManager.prototype.requestMove = function (direction) {
     var self = this;
     this.socket.emit("move", direction, self.grid.serialize());
 };
@@ -120,6 +142,7 @@ GameManager.prototype.requestMove = function(direction) {
 GameManager.prototype.move = function (direction, randoms) {
     // 0: up, 1: right, 2: down, 3: left
     var self = this;
+    this.moved = true;
     if (this.isGameTerminated()) return; // Don"t do anything if the game"s over
     var cell, tile;
     var vector = this.getVector(direction);
@@ -155,8 +178,10 @@ GameManager.prototype.move = function (direction, randoms) {
         });
     });
     if (moved) {
-        var rTile = new Tile(randoms.cell, randoms.value);
-        this.grid.insertTile(rTile);
+        if (randoms != null) {
+            var rTile = new Tile(randoms.cell, randoms.value);
+            this.grid.insertTile(rTile);
+        }
         if (!this.movesAvailable()) {
             this.over = true; // Game over!
         }
