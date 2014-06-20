@@ -15,13 +15,22 @@ io.on('connection', function (socket) {
     });
 
     socket.on('move', function (direction, grid) {
-        var randoms = game.move(direction);
-        console.log(JSON.stringify(randoms, undefined, 2));
-        io.emit('move', direction, randoms);
+        if((JSON.stringify(game.getGrid()) == JSON.stringify(grid))) {
+            var randoms = game.move(direction);
+            io.emit('move', direction, randoms);
+        }
     });
 });
 
-
+/*
+function isEqual(grid1, grid2) {
+    if(grid1.length != 2 || grid2.length != 2)
+        return false;
+    //for(i = 0; i < grid1.length, i++) {
+        grid1[1] == grid2[]
+    //}
+}
+*/
 
 //console.log(JSON.stringify(game, undefined, 2));
 
