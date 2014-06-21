@@ -1,5 +1,5 @@
 {
-  "name" : "2048 Co-Op",
+  "name" : "2048-Co-Op",
   "description" : "Distributed 2048",
   "keywords" : ["2048", "twitchplayspokemon", "server", "client", "browser"],
   "private": true,
@@ -9,6 +9,5 @@
   "engines": {
     "node": "0.6.x"
   },
-  "repository" : {"type": "git", "url": "git://github.com/dvn123/2048-Co-Op.git"},
-  "version" : "0.5"
+  "repository" : {"type": "git", "url": "git://github.com/dvn123/2048-Co-Op.git"}
 }
