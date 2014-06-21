@@ -10,5 +10,4 @@
     "node": "0.6.x"
   },
   "repository" : {"type": "git", "url": "git://github.com/dvn123/2048-Co-Op.git"},
-  "version" : "0.5"
 }
