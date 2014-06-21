@@ -90,6 +90,8 @@ GameManager.prototype.setup = function (gameState) {
         this.grid = new Grid(gameState.grid.size, gameState.grid.cells); // Reload grid
         this.over = gameState.over;
         this.won = gameState.won;
+        this.score       = gameState.score;
+        this.bestScore = gameState.bestScore;
         this.keepPlaying = gameState.keepPlaying;
         this.anarchyVotes = gameState.anarchyVotes;
         this.democracyVotes = gameState.democracyVotes;
@@ -105,12 +107,17 @@ GameManager.prototype.setup = function (gameState) {
 
 // Sends the updated grid to the actuator
 GameManager.prototype.actuate = function () {
+    if (this.bestScore < this.score) {
+        this.bestScore = this.score;
+    }
     // Clear the state when the game is over (game over only, not win)
     if (this.over) {
         //this.storageManager.clearGameState();
     }
 
     this.actuator.actuate(this.grid, {
+        score: this.score,
+        bestScore: this.bestScore,
         over: this.over,
         won: this.won,
         terminated: this.isGameTerminated()
@@ -122,6 +129,7 @@ GameManager.prototype.actuate = function () {
 GameManager.prototype.serialize = function () {
     return {
         grid: this.grid.serialize(),
+        score: this.score,
         over: this.over,
         won: this.won,
         keepPlaying: this.keepPlaying
@@ -176,6 +184,7 @@ GameManager.prototype.move = function (direction, randoms) {
                     merged.mergedFrom = [tile, next];
                     self.grid.insertTile(merged);
                     self.grid.removeTile(tile);
+                    self.score += merged.value;
                     // Converge the two tiles" positions
                     tile.updatePosition(positions.next);
                     // The mighty 2048 tile
