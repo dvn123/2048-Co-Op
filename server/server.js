@@ -3,10 +3,10 @@ var log4js = require('log4js');
 
 log4js.clearAppenders();
 log4js.loadAppender('file');
-log4js.addAppender(log4js.appenders.file('logs/Moves.log'), 'Move');
+/*log4js.addAppender(log4js.appenders.file('logs/Moves.log'), 'Move');
 log4js.addAppender(log4js.appenders.file('logs/D&A.log'), 'Democracy & Anarchy');
 log4js.addAppender(log4js.appenders.file('logs/User.log'), 'User');
-log4js.addAppender(log4js.appenders.file('logs/Synchronization.log'), 'Synchronization');
+log4js.addAppender(log4js.appenders.file('logs/Synchronization.log'), 'Synchronization');*/
 
 var moveLogger = log4js.getLogger('Move');
 var daLogger = log4js.getLogger('Democracy & Anarchy');
