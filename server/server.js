@@ -1,4 +1,4 @@
-var io = require('socket.io')(80);
+var io = require('socket.io')(8080);
 var log4js = require('log4js');
 
 log4js.clearAppenders();
