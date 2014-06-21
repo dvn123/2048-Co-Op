@@ -8,8 +8,8 @@ function GameManager(size, InputManager, Actuator) {
     //this.current_users = 1;
     var self = this;
 
-    this.socket.on("gameState", function (gameState) {
-        if (!self.hasState)
+    this.socket.on("gameState", function (gameState, force) {
+        if (!self.hasState || force)
             self.setup(gameState);
         else {
             if (!self.moved) {
@@ -20,7 +20,8 @@ function GameManager(size, InputManager, Actuator) {
             }
         }
     });
-    this.socket.on("move", function (direction, rTile) {
+    this.socket.on("move", function (direction, rTile, name) {
+        self.actuator.addLog(name, direction);
         self.move(direction, rTile);
     });
     this.socket.on("gameMode", function (mode) {
@@ -93,15 +94,15 @@ GameManager.prototype.setup = function (gameState) {
         this.score       = gameState.score;
         this.bestScore = gameState.bestScore;
         this.keepPlaying = gameState.keepPlaying;
-        this.anarchyVotes = gameState.anarchyVotes;
-        this.democracyVotes = gameState.democracyVotes;
-        this.currentMode = gameState.currentMode;
     }
     // Update the actuator
-    this.actuator.updateCurrentMode(this.currentMode);
-    this.actuator.updateDemocracyVotes(this.democracyVotes);
-    this.actuator.updateAnarchyVotes(this.anarchyVotes);
+    this.actuator.updateCurrentMode(gameState.currentMode);
+    this.actuator.updateDemocracyVotes(gameState.democracyVotes);
+    this.actuator.updateAnarchyVotes(gameState.anarchyVotes);
+    this.actuator.updateGamesLost(gameState.gamesLost);
+    this.actuator.updateGamesWon(gameState.gamesWon);
     this.actuate();
+    this.actuator.continueGame();
     this.syncCheck = setInterval(this.syncChecker, sync_interval);
 };
 

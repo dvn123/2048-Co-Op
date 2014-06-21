@@ -1,16 +1,18 @@
 function HTMLActuator() {
     this.tileContainer = document.querySelector(".tile-container");
-    this.messageContainer = document.querySelector(".game-message");
+    //this.messageContainer = document.querySelector(".game-message");
     this.scoreContainer = document.querySelector(".score-container");
     this.bestContainer = document.querySelector(".best-container");
     this.modeContainer = document.querySelector(".current-mode");
     this.anarchyVoteContainer = document.querySelector(".anarchy-votes");
     this.democracyVoteContainer = document.querySelector(".democracy-votes");
     this.dvcContainer = document.querySelector(".democracy-vote-counter");
-    this.upVoteContainer = document.querySelector(".up-votes");
-    this.rightVoteContainer = document.querySelector(".right-votes");
-    this.downVoteContainer = document.querySelector(".down-votes");
-    this.leftVoteContainer = document.querySelector(".left-votes");
+    this.upVoteContainer = document.querySelector(".up-votes-n");
+    this.rightVoteContainer = document.querySelector(".right-votes-n");
+    this.downVoteContainer = document.querySelector(".down-votes-n");
+    this.leftVoteContainer = document.querySelector(".left-votes-n");
+    this.gamesLostContainer = document.querySelector(".games-lost-n");
+    this.gamesWonContainer = document.querySelector(".games-won-n");
 }
 
 HTMLActuator.prototype.actuate = function (grid, metadata) {
@@ -151,22 +153,34 @@ HTMLActuator.prototype.updateAnarchyVotes = function (votes) {
 };
 
 HTMLActuator.prototype.updateDemocracyMoves = function (up, right, down, left) {
-    this.upVoteContainer.textContent = "Up Votes: " + up;
-    this.rightVoteContainer.textContent = "Right Votes: " + right;
-    this.downVoteContainer.textContent = "Down Votes: " + down;
-    this.leftVoteContainer.textContent = "Left Votes: " + left;
+    this.upVoteContainer.textContent = up;
+    this.rightVoteContainer.textContent = right;
+    this.downVoteContainer.textContent = down;
+    this.leftVoteContainer.textContent = left;
+};
+
+HTMLActuator.prototype.updateGamesLost = function (n) {
+    this.gamesLostContainer.textContent = " " + n;
+};
+
+HTMLActuator.prototype.updateGamesWon = function (n) {
+    this.gamesWonContainer.textContent = " " + n;
+};
+
+HTMLActuator.prototype.addLog = function (name, direction) {
+    this.gamesWonContainer.textContent = " " + n;
 };
 
 HTMLActuator.prototype.message = function (won) {
     var type = won ? "game-won" : "game-over";
     var message = won ? "You win!" : "Game over!";
 
-    this.messageContainer.classList.add(type);
-    this.messageContainer.getElementsByTagName("p")[0].textContent = message;
+    //this.messageContainer.classList.add(type);
+    //this.messageContainer.getElementsByTagName("p")[0].textContent = message;
 };
 
 HTMLActuator.prototype.clearMessage = function () {
     // IE only takes one value to remove at a time.
-    this.messageContainer.classList.remove("game-won");
-    this.messageContainer.classList.remove("game-over");
+    //this.messageContainer.classList.remove("game-won");
+    //this.messageContainer.classList.remove("game-over");
 };

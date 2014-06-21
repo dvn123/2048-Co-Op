@@ -16,7 +16,8 @@ var syncLogger = log4js.getLogger('Synchronization');
 var gameManager = require("./server_game_manager.js");
 var game = new gameManager(4);
 
-//var bestScore = 0;
+var gamesWon = 0;
+var gamesLost = 0;
 
 const voteThrottle = 0; //Test Value
 //const voteThrottle = 500; //Live Value
@@ -41,12 +42,7 @@ io.sockets.on("connection", function (socket) {
     userCount++;
     userLogger.debug('Connect - UserCount:' + userCount + ', Author: ' + socket.id);
     socket.on("getGameState", function () {
-        var game_state = game.getGameState();
-        game_state["anarchyVotes"] = anarchyVotes;
-        game_state["democracyVotes"] = democracyVotes;
-        game_state["currentMode"] = currentMode;
-        socket.emit("gameState", game_state);
-        syncLogger.debug('SentGameState - GameState:' + JSON.stringify(game_state) + ', Author: ' + socket.id);
+        sendGameState(socket);
     });
 
     socket.on("nickname", function (name) {
@@ -94,6 +90,23 @@ io.sockets.on("connection", function (socket) {
     });
 });
 
+function sendGameState(socket) {
+    var game_state = game.getGameState();
+    game_state["anarchyVotes"] = anarchyVotes;
+    game_state["democracyVotes"] = democracyVotes;
+    game_state["currentMode"] = currentMode;
+    game_state["gamesLost"] = gamesLost;
+    game_state["gamesWon"] = gamesWon;
+    if(socket != null) {
+        socket.emit("gameState", game_state, false);
+        syncLogger.debug('SentGameState - GameState:' + JSON.stringify(game_state) + ', Author: ' + socket.id);
+    }
+    else {
+        io.emit("gameState", game_state, true);
+        syncLogger.debug('SentGameState - GameState:' + JSON.stringify(game_state) + ', Author: server');
+    }
+}
+
 function emitMove(direction, socket) {
     var randoms = game.move(direction);
     if(socket == null) {
@@ -115,6 +128,16 @@ function emitMove(direction, socket) {
     if(randoms == null)
         moveLogger.debug('Direction:' + direction + ', Random: Null, Author: ' + socket.id);
     else moveLogger.debug('Direction:' + direction + ', RandomCell: ' + randoms.cell + ', RandomValue: ' + randoms.value + ', Author: ' + socket.id);
+
+    if(randoms["over"]) {
+        gamesLost++;
+        game.setup();
+        sendGameState(null);
+    } else if(randoms["won"]) {
+        gamesWon++;
+        game.setup();
+        sendGameState(null);
+    }
 }
 
 function checkVoteThrottle(socketId) {
@@ -128,6 +151,7 @@ function checkVoteThrottle(socketId) {
         return true;
     }
 }
+
 
 function voteCounter() {
     if (democracyVotes > anarchyVotes) {

@@ -47,7 +47,29 @@ h1.title {
   float: right;
   text-align: right; }
 
-.score-container, .best-container, .anarchy-votes, .democracy-votes {
+.democracy-vote-counter {
+  width: 155px;
+  background: #bbada0;
+  font-size: 25px;
+  height: 200px;
+  line-height: 0px !important;
+  font-weight: bold;
+  border-radius: 3px;
+  color: white;
+  text-align: center; }
+
+.container-text-dem {
+  text-transform: uppercase;
+  font-size: 13px;
+  text-align: left;
+  line-height: 0px !important;
+  color: #eee4da; }
+
+.container-text2-dem {
+  position: relative;
+  bottom: -3px; }
+
+.score-container, .best-container, .anarchy-votes, .democracy-votes, .games-lost, .games-won {
   position: relative;
   display: inline-block;
   background: #bbada0;
@@ -60,7 +82,7 @@ h1.title {
   color: white;
   margin-top: 8px;
   text-align: center; }
-  .score-container:after, .best-container:after, .anarchy-votes:after, .democracy-votes:after {
+  .score-container:after, .best-container:after, .anarchy-votes:after, .democracy-votes:after, .games-lost:after, .games-won:after {
     position: absolute;
     width: 100%;
     top: 10px;
@@ -70,7 +92,7 @@ h1.title {
     line-height: 13px;
     text-align: center;
     color: #eee4da; }
-  .score-container .score-addition, .best-container .score-addition, .anarchy-votes .score-addition, .democracy-votes .score-addition {
+  .score-container .score-addition, .best-container .score-addition, .anarchy-votes .score-addition, .democracy-votes .score-addition, .games-lost .score-addition, .games-won .score-addition {
     position: absolute;
     right: 30px;
     color: red;
@@ -100,6 +122,24 @@ h1.title {
 
 .democracy-votes:after {
   content: "Democracy"; }
+
+.container-text {
+  position: relative;
+  bottom: 20px;
+  text-transform: uppercase;
+  font-size: 13px;
+  text-align: left;
+  color: #eee4da; }
+
+.container-text2 {
+  position: relative;
+  bottom: 16px; }
+
+.games-lost, .games-won {
+  display: block;
+  width: 105px;
+  height: 14px !important;
+  text-align: left; }
 
 p {
   margin-top: 0;
@@ -131,15 +171,13 @@ hr {
   width: 36%;
   float: left; }
 
-.vote-counter, .democracy-vote-counter {
+.games-counter, .democracy-vote-counter {
   position: relative;
   left: 60%;
-  top: 150px; }
+  top: 230px; }
 
-.vote-container {
-  position: relative;
-  left: 0px;
-  bottom: 10px; }
+.games-counter {
+  display: compact; }
 
 .democracy-vote-counter {
   margin-top: 40px;
