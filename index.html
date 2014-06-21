@@ -19,9 +19,24 @@
     <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui">
 </head>
 <body>
+<div class="left-container">
+    <div class="vote-counter">
+        <h2>Votes</h2>
+        <div class="vote-container">
+        <p class="anarchy-votes">Democracy: 0</p>
+        <p class="democracy-votes">Anarchy: 0</p>
+        </div>
+    </div>
+    <div class="democracy-vote-counter">
+        <p class="up-votes">Up Votes: 0</p>
+        <p class="right-votes">Right Votes: 0</p>
+        <p class="down-votes">Down Votes: 0</p>
+        <p class="left-votes">Left Votes: 0</p>
+    </div>
+</div>
 <div class="container">
     <div class="heading">
-        <h1 class="title">2048</h1>
+        <h1 class="title">2048 Co-Op</h1>
     </div>
     <div class="above-game">
         <p class="game-intro">Join the numbers and get to the <strong>2048 tile!</strong> Together!</p>
@@ -67,8 +82,10 @@
     <a class="current-mode">Anarchy</a>
     <a class="democracy-button">Vote Democracy</a>
 </div>
+<div class="right-container">
+
+</div>
 <script src="lib/socket.io-client/socket.io.js"></script>
-<script src="lib/jquery-2.1.1.min.js"></script>
 <script src="js/bind_polyfill.js"></script>
 <script src="js/classlist_polyfill.js"></script>
 <script src="js/animframe_polyfill.js"></script>

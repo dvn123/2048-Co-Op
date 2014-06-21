@@ -5,6 +5,7 @@ function GameManager(size, InputManager, Actuator) {
     this.socket = io.connect(server_ip + server_port);
     this.startTiles = 2;
     this.hasState = false;
+    //this.current_users = 1;
     var self = this;
 
     this.socket.on("gameState", function (gameState) {
@@ -12,7 +13,7 @@ function GameManager(size, InputManager, Actuator) {
             self.setup(gameState);
         else {
             if (!self.moved) {
-                if(JSON.stringify(gameState.grid) != JSON.stringify(self.grid.serialize())) {
+                if (JSON.stringify(gameState.grid) != JSON.stringify(self.grid.serialize())) {
                     self.grid = new Grid(gameState.grid.size, gameState.grid.cells);
                     self.actuate();
                 }
@@ -23,20 +24,31 @@ function GameManager(size, InputManager, Actuator) {
         self.move(direction, rTile);
     });
     this.socket.on("gameMode", function (mode) {
-        console.log("New mode: " + mode);
         self.actuator.updateCurrentMode(mode);
     });
-    //this.socket.on("democracy-vote");
+    this.socket.on("democracyVote", function (democracyVotes) {
+        self.actuator.updateDemocracyVotes(democracyVotes);
+    });
+    this.socket.on("anarchyVote", function (anarchyVotes) {
+        self.actuator.updateAnarchyVotes(anarchyVotes);
+    });
+    this.socket.on("democracyMoveVote", function (up, right, down, left) {
+        console.log(up);
+        console.log(right);
+        console.log(down);
+        console.log(left);
+        self.actuator.updateDemocracyMoves(up, right, down, left);
+    });
+
 
     this.socket.emit("getGameState");
-
     this.inputManager.on("requestMove", this.requestMove.bind(this));
     this.inputManager.on("anarchyVote", this.anarchyVote.bind(this));
     this.inputManager.on("democracyVote", this.democracyVote.bind(this));
 }
 
 GameManager.prototype.syncChecker = function () {
-    if(this.socket == undefined)
+    if (this.socket == undefined)
         this.socket = io.connect(server_ip + server_port);
     this.socket.emit("getGameState");
     this.moved = false;
@@ -177,6 +189,7 @@ GameManager.prototype.move = function (direction, randoms) {
             }
         });
     });
+    this.actuator.updateDemocracyMoves(0, 0, 0, 0);
     if (moved) {
         if (randoms != null) {
             var rTile = new Tile(randoms.cell, randoms.value);
