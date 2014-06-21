@@ -1,6 +1,7 @@
 function GameManager(size) {
     this.size = size; // Size of the grid
     this.startTiles = 2;
+    this.bestScore = 0;
     this.setup();
 }
 
@@ -31,6 +32,7 @@ GameManager.prototype.isGameTerminated = function () {
 GameManager.prototype.setup = function () {
     this.grid = new Grid(this.size);
     this.over = false;
+    this.score = 0;
     this.won = false;
     this.keepPlaying = false;
     this.addStartTiles();
@@ -99,6 +101,9 @@ GameManager.prototype.move = function (direction) {
                     self.grid.insertTile(merged);
                     self.grid.removeTile(tile);
 
+                    // Update the score
+                    self.score += merged.value;
+
                     // Converge the two tiles" positions
                     tile.updatePosition(positions.next);
 
@@ -120,6 +125,11 @@ GameManager.prototype.move = function (direction) {
             this.over = true; // Game over!
         }
     }
+
+    if (this.bestScore < this.score) {
+        this.bestScore = this.score;
+    }
+
     return randoms;
 };
 
@@ -195,6 +205,8 @@ GameManager.prototype.positionsEqual = function (first, second) {
 GameManager.prototype.serialize = function () {
     return {
         grid: this.grid.serialize(),
+        score: this.score,
+        bestScore: this.score,
         over: this.over,
         won: this.won,
         keepPlaying: this.keepPlaying

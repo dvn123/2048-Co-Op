@@ -16,6 +16,8 @@ var syncLogger = log4js.getLogger('Synchronization');
 var gameManager = require("./server_game_manager.js");
 var game = new gameManager(4);
 
+//var bestScore = 0;
+
 const voteThrottle = 0; //Test Value
 //const voteThrottle = 500; //Live Value
 const voteCounterInterval = 10000;
