@@ -1,15 +1,6 @@
 var io = require('socket.io')(process.env.PORT || 8080);
 var log4js = require('log4js');
 
-console.log(process.env.PORT);
-
-log4js.clearAppenders();
-log4js.loadAppender('file');
-/*log4js.addAppender(log4js.appenders.file('logs/Moves.log'), 'Move');
-log4js.addAppender(log4js.appenders.file('logs/D&A.log'), 'Democracy & Anarchy');
-log4js.addAppender(log4js.appenders.file('logs/User.log'), 'User');
-log4js.addAppender(log4js.appenders.file('logs/Synchronization.log'), 'Synchronization');*/
-
 var moveLogger = log4js.getLogger('Move');
 var daLogger = log4js.getLogger('Democracy & Anarchy');
 var userLogger = log4js.getLogger('User');
