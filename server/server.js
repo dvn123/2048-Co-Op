@@ -26,6 +26,7 @@ var democracyVotes = 0;
 var anarchyVotes = 1;
 var voteThrottleCounter = {};
 var democracyMoveVotes = [0, 0, 0, 0];
+// 0: up, 1: right, 2: down, 3: left
 
 var userCount = 0;
 
@@ -44,6 +45,11 @@ io.sockets.on("connection", function (socket) {
         game_state["currentMode"] = currentMode;
         socket.emit("gameState", game_state);
         syncLogger.debug('SentGameState - GameState:' + JSON.stringify(game_state) + ', Author: ' + socket.id);
+    });
+
+    socket.on("nickname", function (name) {
+        socket.set("nickname", name);
+        userLogger.debug('Nickname - Name:' + name + ', Author: ' + socket.id);
     });
 
     socket.on("democracyVote", function () {
@@ -72,6 +78,7 @@ io.sockets.on("connection", function (socket) {
                 emitMove(direction, socket)
             } else {
                 democracyMoveVotes[direction]++;
+                io.emit("democracyMoveVote", democracyMoveVotes[0], democracyMoveVotes[1], democracyMoveVotes[2], democracyMoveVotes[3]);
                 daLogger.debug('MoveVote - Direction:' + direction + ', Author: ' + socket.id);
             }
         } else {
@@ -87,13 +94,22 @@ io.sockets.on("connection", function (socket) {
 
 function emitMove(direction, socket) {
     var randoms = game.move(direction);
-    if(randoms == undefined)
-        randoms = null;
-    io.emit("move", direction, randoms);
     if(socket == null) {
         socket = {};
         socket['id'] = "democracy";
     }
+
+    if(randoms == undefined)
+        randoms = null;
+
+    if(socket.nickname == undefined) {
+        name = "User";
+        if(socket['id'] == "democracy")
+            name = "democracy;"
+    } else var name = socket.nickname;
+
+    io.emit("move", direction, randoms, name);
+
     if(randoms == null)
         moveLogger.debug('Direction:' + direction + ', Random: Null, Author: ' + socket.id);
     else moveLogger.debug('Direction:' + direction + ', RandomCell: ' + randoms.cell + ', RandomValue: ' + randoms.value + ', Author: ' + socket.id);
@@ -128,8 +144,10 @@ function voteCounterDemocracy() {
     var move = -1;
     var max_move_votes_counter = 0;
     for (i = 0; i < democracyMoveVotes.length; i++) {
-        if (democracyMoveVotes[i] > max_move_votes_counter && democracyMoveVotes[i] > 0)
+        if (democracyMoveVotes[i] > max_move_votes_counter && democracyMoveVotes[i] > 0) {
             move = i;
+            max_move_votes_counter = democracyMoveVotes[i];
+        }
     }
     if (move != -1)
         emitMove(move, null);

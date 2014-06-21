@@ -2,6 +2,13 @@ function HTMLActuator() {
     this.tileContainer = document.querySelector(".tile-container");
     this.messageContainer = document.querySelector(".game-message");
     this.modeContainer = document.querySelector(".current-mode");
+    this.anarchyVoteContainer = document.querySelector(".anarchy-votes");
+    this.democracyVoteContainer = document.querySelector(".democracy-votes");
+    this.dvcContainer = document.querySelector(".democracy-vote-counter");
+    this.upVoteContainer = document.querySelector(".up-votes");
+    this.rightVoteContainer = document.querySelector(".right-votes");
+    this.downVoteContainer = document.querySelector(".down-votes");
+    this.leftVoteContainer = document.querySelector(".left-votes");
 }
 
 HTMLActuator.prototype.actuate = function (grid, metadata) {
@@ -98,20 +105,30 @@ HTMLActuator.prototype.positionClass = function (position) {
 };
 
 HTMLActuator.prototype.updateCurrentMode = function (mode) {
-    if(mode == "Anarchy")
+    if(mode == "Anarchy") {
         this.modeContainer.style.backgroundColor = anarchy_color;
-    else
+        this.dvcContainer.style.opacity = 0;
+    } else {
         this.modeContainer.style.backgroundColor = democracy_color;
+        this.dvcContainer.style.opacity = 1;
+    }
 
     this.modeContainer.textContent = mode;
 };
 
 HTMLActuator.prototype.updateDemocracyVotes = function (votes) {
-
+    this.anarchyVoteContainer.textContent = "Democracy: " + votes;
 };
 
 HTMLActuator.prototype.updateAnarchyVotes = function (votes) {
+    this.democracyVoteContainer.textContent = "Anarchy: " + votes;
+};
 
+HTMLActuator.prototype.updateDemocracyMoves = function (up, right, down, left) {
+    this.upVoteContainer.textContent = "Up Votes: " + up;
+    this.rightVoteContainer.textContent = "Right Votes: " + right;
+    this.downVoteContainer.textContent = "Down Votes: " + down;
+    this.leftVoteContainer.textContent = "Left Votes: " + left;
 };
 
 HTMLActuator.prototype.message = function (won) {
