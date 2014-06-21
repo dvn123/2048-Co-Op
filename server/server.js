@@ -1,5 +1,23 @@
-var io = require("socket.io").listen(8080, { log: false });
+var app = require('http').createServer(handler)
+var io = require('socket.io')(app);
+var fs = require('fs');
 var log4js = require('log4js');
+app.listen(80);
+
+
+function handler (req, res) {
+  function (err, data) {
+    if (err) {
+      res.writeHead(500);
+      return res.end('Error loading index.html');
+    }
+
+    res.writeHead(200);
+    res.end("<p> Go Away!</p>);
+  });
+}
+
+
 
 log4js.clearAppenders();
 log4js.loadAppender('file');
