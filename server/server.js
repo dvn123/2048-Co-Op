@@ -1,11 +1,11 @@
-var app = require('http').createServer(handler)
+var app = require('http').createServer(handler);
 var io = require('socket.io')(app);
-var fs = require('fs');
 var log4js = require('log4js');
 app.listen(80);
 
 
 function handler (req, res) {
+  fs.readFile(__dirname + '../index.html',
   function (err, data) {
     if (err) {
       res.writeHead(500);
@@ -13,7 +13,7 @@ function handler (req, res) {
     }
 
     res.writeHead(200);
-    res.end("<p> Go Away!</p>);
+    res.end(data);
   });
 }
 
