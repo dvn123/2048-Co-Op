@@ -1,7 +1,5 @@
 var io = require('socket.io')(80);
 var log4js = require('log4js');
-app.listen(80);
-
 
 log4js.clearAppenders();
 log4js.loadAppender('file');
