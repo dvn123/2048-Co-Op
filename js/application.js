@@ -5,6 +5,8 @@ const democracy_color = "#0068af";
 const anarchy_color = "#F2555C";
 const sync_interval = 5000;
 
+//TODO LOG
+
 window.requestAnimationFrame(function () {
     new GameManager(4, KeyboardInputManager, HTMLActuator);
 });

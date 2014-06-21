@@ -13,6 +13,9 @@ function HTMLActuator() {
     this.leftVoteContainer = document.querySelector(".left-votes-n");
     this.gamesLostContainer = document.querySelector(".games-lost-n");
     this.gamesWonContainer = document.querySelector(".games-won-n");
+    this.logContainer = document.querySelector(".log");
+
+    this.logIndex = 0;
 }
 
 HTMLActuator.prototype.actuate = function (grid, metadata) {
@@ -168,7 +171,8 @@ HTMLActuator.prototype.updateGamesWon = function (n) {
 };
 
 HTMLActuator.prototype.addLog = function (name, direction) {
-    this.gamesWonContainer.textContent = " " + n;
+    this.logIndex++;
+    //this.gamesWonContainer.textContent = " " + n;
 };
 
 HTMLActuator.prototype.message = function (won) {
