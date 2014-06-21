@@ -1,5 +1,5 @@
 {
-  "name" : "2048 Co-Op",
+  "name" : "2048-Co-Op",
   "description" : "Distributed 2048",
   "keywords" : ["2048", "twitchplayspokemon", "server", "client", "browser"],
   "private": true,
