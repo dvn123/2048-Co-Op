@@ -119,8 +119,9 @@ GameManager.prototype.move = function (direction) {
             }
         });
     });
+    var data = {};
     if (moved) {
-        var randoms = this.addRandomTile();
+        data = this.addRandomTile();
         if (!this.movesAvailable()) {
             this.over = true; // Game over!
         }
@@ -129,8 +130,9 @@ GameManager.prototype.move = function (direction) {
     if (this.bestScore < this.score) {
         this.bestScore = this.score;
     }
-
-    return randoms;
+    data["over"]  = this.over;
+    data["won"] = this.won;
+    return data;
 };
 
 // Get the vector representing the chosen direction

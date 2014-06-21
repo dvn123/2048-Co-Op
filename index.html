@@ -20,14 +20,15 @@
 </head>
 <body>
 <div class="left-container">
-    <!--<div class="vote-counter">
-        <h2>Votes</h2>
-    </div>-->
+    <div class="games-counter">
+        <div class="games-lost"><span class="container-text">Games Lost:</span><span class="container-text2 games-lost-n"> 0</span></div>
+        <div class="games-won"><span class="container-text">Games Won:</span><span class="container-text2 games-won-n"> 0</span></div>
+    </div>
     <div class="democracy-vote-counter">
-        <p class="up-votes">Up Votes: 0</p>
-        <p class="right-votes">Right Votes: 0</p>
-        <p class="down-votes">Down Votes: 0</p>
-        <p class="left-votes">Left Votes: 0</p>
+        <p><span class="container-text-dem">Up Votes: </span><span class="container-text2-dem up-votes-n">0</span></p>
+        <p><span class="container-text-dem">Right Votes: </span><span class="container-text2-dem right-votes-n">0</span></p>
+        <p><span class="container-text-dem">Down Votes: </span><span class="container-text2-dem down-votes-n">0</span></p>
+        <p><span class="container-text-dem">Left Votes: </span><span class="container-text2-dem left-votes-n">0</span></p>
     </div>
 </div>
 <div class="container">
@@ -44,13 +45,13 @@
         <p class="game-intro">Join the numbers and get to the <strong>2048 tile!</strong> Together!</p>
     </div>
     <div class="game-container">
-        <div class="game-message">
-            <p></p>
+        <!-- <div class="game-message">
+             <p></p>
             <div class="lower">
-                <a class="keep-playing-button">Keep going</a>
-                <a class="retry-button">Try again</a>
-            </div>
-        </div>
+                 <!--<a class="keep-playing-button">Keep going</a>
+                 <a class="retry-button">Wait for the server!</a>
+             </div>
+        </div>-->
         <div class="grid-container">
             <div class="grid-row">
                 <div class="grid-cell"></div>
@@ -85,7 +86,19 @@
     <a class="democracy-button">Vote Democracy</a>
 </div>
 <div class="right-container">
-
+    <div class="log">
+        <p>User moved Right</p>
+        <p>asd</p>
+        <p>asd</p>
+        <p>asd</p>
+        <p>asd</p>
+        <p>asd</p>
+        <p>asd</p>
+        <p>asd</p>
+        <p>asd</p>
+        <p>asd</p>
+        <p>asd</p>
+    </div>
 </div>
 <script src="lib/socket.io-client/socket.io.js"></script>
 <script src="js/bind_polyfill.js"></script>
