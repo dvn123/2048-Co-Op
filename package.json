@@ -1,13 +1,31 @@
 {
-  "name" : "2048-Co-Op",
-  "description" : "Distributed 2048",
-  "keywords" : ["2048", "twitchplayspokemon", "server", "client", "browser"],
-  "private": true,
-    "dependencies": {
-      "socket.io": "~0.9.6"
+  "name": "2048-Co-Op",
+  "description": "Distributed 2048",
+  "keywords": [
+    "2048",
+    "twitchplayspokemon",
+    "server",
+    "client",
+    "browser"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dvn123/2048-Co-Op.git"
   },
-  "engines": {
-    "node": "0.6.x"
+  "bugs": {
+    "url": "https://github.com/dvn123/2048-Co-Op/issues"
   },
-  "repository" : {"type": "git", "url": "git://github.com/dvn123/2048-Co-Op.git"}
+  "homepage": "https://github.com/dvn123/2048-Co-Op",
+  "version": "0.5.0",
+  "main": "index.html",
+  "devDependencies": {},
+  "scripts": {
+    "test": "node ./server/server.js"
+  },
+  "author": "Diogo Vaz Nunes",
+  "license": "MIT",
+  "dependencies": {
+    "log4js": "^0.6.14",
+    "socket.io": "^1.0.6"
+  }
 }
