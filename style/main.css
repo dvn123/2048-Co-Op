@@ -47,7 +47,7 @@ h1.title {
   float: right;
   text-align: right; }
 
-.score-container, .best-container {
+.score-container, .best-container, .anarchy-votes, .democracy-votes {
   position: relative;
   display: inline-block;
   background: #bbada0;
@@ -60,7 +60,7 @@ h1.title {
   color: white;
   margin-top: 8px;
   text-align: center; }
-  .score-container:after, .best-container:after {
+  .score-container:after, .best-container:after, .anarchy-votes:after, .democracy-votes:after {
     position: absolute;
     width: 100%;
     top: 10px;
@@ -70,7 +70,7 @@ h1.title {
     line-height: 13px;
     text-align: center;
     color: #eee4da; }
-  .score-container .score-addition, .best-container .score-addition {
+  .score-container .score-addition, .best-container .score-addition, .anarchy-votes .score-addition, .democracy-votes .score-addition {
     position: absolute;
     right: 30px;
     color: red;
@@ -86,11 +86,20 @@ h1.title {
     -moz-animation-fill-mode: both;
     animation-fill-mode: both; }
 
+.anarchy-votes, .democracy-votes {
+  width: 10%; }
+
 .score-container:after {
   content: "Score"; }
 
 .best-container:after {
   content: "Best"; }
+
+.anarchy-votes:after {
+  content: "Anarchy"; }
+
+.democracy-votes:after {
+  content: "Democracy"; }
 
 p {
   margin-top: 0;
