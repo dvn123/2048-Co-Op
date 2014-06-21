@@ -1,4 +1,5 @@
-var io = require('socket.io')(8080);
+var io = require('socket.io');
+io.listen(process.env.PORT || 5000);
 var log4js = require('log4js');
 
 log4js.clearAppenders();
