@@ -12,20 +12,20 @@
     "type": "git",
     "url": "git://github.com/dvn123/2048-Co-Op.git"
   },
+  "version": "0.5.0",
   "bugs": {
     "url": "https://github.com/dvn123/2048-Co-Op/issues"
   },
   "homepage": "https://github.com/dvn123/2048-Co-Op",
-  "version": "0.5.0",
   "main": "index.html",
+  "dependencies": {
+    "socket.io": "^1.0.6",
+    "log4js": "^0.6.14"
+  },
   "devDependencies": {},
   "scripts": {
-    "test": "node ./server/server.js"
+    "test": "node server/server.js"
   },
   "author": "Diogo Vaz Nunes",
-  "license": "MIT",
-  "dependencies": {
-    "log4js": "^0.6.14",
-    "socket.io": "^1.0.6"
-  }
+  "license": "MIT"
 }
