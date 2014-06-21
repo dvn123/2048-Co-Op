@@ -143,11 +143,11 @@ HTMLActuator.prototype.updateCurrentMode = function (mode) {
 };
 
 HTMLActuator.prototype.updateDemocracyVotes = function (votes) {
-    this.anarchyVoteContainer.textContent = "Democracy: " + votes;
+    this.democracyVoteContainer.textContent = votes;
 };
 
 HTMLActuator.prototype.updateAnarchyVotes = function (votes) {
-    this.democracyVoteContainer.textContent = "Anarchy: " + votes;
+    this.anarchyVoteContainer.textContent = votes;
 };
 
 HTMLActuator.prototype.updateDemocracyMoves = function (up, right, down, left) {
