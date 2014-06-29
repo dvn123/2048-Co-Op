@@ -24,7 +24,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "node server/server.js"
+    "test": "node server/app.js"
   },
   "author": "Diogo Vaz Nunes",
   "license": "MIT"
