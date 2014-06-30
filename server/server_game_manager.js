@@ -1,6 +1,12 @@
 var Tile = require('./tile');
 var Grid = require('./grid');
 
+//Tests
+
+//almost over grid
+const test1 = "{\"size\":4,\"cells\":[[{\"position\":{\"x\":0,\"y\":0},\"value\":8},{\"position\":{\"x\":0,\"y\":1},\"value\":2},{\"position\":{\"x\":0,\"y\":2},\"value\":8},{\"position\":{\"x\":0,\"y\":3},\"value\":4}],[{\"position\":{\"x\":1,\"y\":0},\"value\":2},{\"position\":{\"x\":1,\"y\":1},\"value\":32},{\"position\":{\"x\":1,\"y\":2},\"value\":16},{\"position\":{\"x\":1,\"y\":3},\"value\":64}],[{\"position\":{\"x\":2,\"y\":0},\"value\":8},{\"position\":{\"x\":2,\"y\":1},\"value\":8},{\"position\":{\"x\":2,\"y\":2},\"value\":256},{\"position\":{\"x\":2,\"y\":3},\"value\":8}],[null,{\"position\":{\"x\":3,\"y\":1},\"value\":32},{\"position\":{\"x\":3,\"y\":2},\"value\":4},{\"position\":{\"x\":3,\"y\":3},\"value\":2}]]}";
+
+
 function GameManager(size) {
     this.size = size; // Size of the grid
     this.startTiles = 2;
@@ -33,7 +39,8 @@ GameManager.prototype.isGameTerminated = function () {
 
 // Set up the game
 GameManager.prototype.setup = function () {
-    this.grid = new Grid(this.size);
+    this.grid = new Grid(this.size, JSON.parse(test1).cells); //test1
+//    this.grid = new Grid(this.size);
     this.over = false;
     this.score = 0;
     this.won = false;
