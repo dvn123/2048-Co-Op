@@ -1,7 +1,8 @@
 var express = require('express');
 var app = express();
 app.use(express.static(__dirname + '/public'));
-var expressServer = app.listen(process.env.PORT || 8080);
+var expressServer = app.listen(process.env.PORT || 8080
+);
 
 var io = require('socket.io')(expressServer);
 
