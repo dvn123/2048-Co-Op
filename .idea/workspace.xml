@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ad10b746-1e99-4783-87a5-49e07bad9a21" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="2048-Co-Op.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -494,7 +495,7 @@
       <workItem from="1404129517076" duration="1132000" />
       <workItem from="1404218574548" duration="335000" />
       <workItem from="1412546806491" duration="15000" />
-      <workItem from="1412546843534" duration="1651000" />
+      <workItem from="1412546843534" duration="1820000" />
     </task>
     <task id="LOCAL-00001" summary="Added web server to node using express">
       <created>1404067184063</created>
@@ -504,7 +505,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27668000" />
+    <option name="totallyTimeSpent" value="27837000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
