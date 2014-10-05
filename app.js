@@ -31,6 +31,7 @@ var voteCounterDemocracyRun;
 
 io.sockets.on("connection", function (socket) {
     userCount++;
+    console.log("asd");
     socket.on("getGameState", function () {
         sendGameState(socket);
     });

@@ -1,6 +1,7 @@
 function HTMLActuator() {
     this.tileContainer = document.querySelector(".tile-container");
     this.messageContainer = document.querySelector(".game-message");
+    console.log(this.messageContainer);
     this.scoreContainer = document.querySelector(".score-container");
     this.bestContainer = document.querySelector(".best-container");
     this.modeContainer = document.querySelector(".current-mode");
@@ -38,10 +39,10 @@ HTMLActuator.prototype.actuate = function (grid, metadata) {
         if (metadata.terminated) {
             if (metadata.over) {
                 self.message(false); // You lose
-                //window.setTimeout(self.clearMessage(), 2000);
+                window.setTimeout(self.clearMessage, 2000);
             } else if (metadata.won) {
                 self.message(true); // You win!
-                //window.setTimeout(self.clearMessage(), 2000);
+                window.setTimeout(self.clearMessage, 2000);
             }
 
         }
@@ -182,8 +183,6 @@ HTMLActuator.prototype.addLog = function (name, direction) {
 };
 
 HTMLActuator.prototype.message = function (won) {
-    console.log("ola2");
-
     var type = won ? "game-won" : "game-over";
     var message = won ? "You win!" : "Game over!";
 
@@ -192,7 +191,7 @@ HTMLActuator.prototype.message = function (won) {
 };
 
 HTMLActuator.prototype.clearMessage = function () {
-    console.log("ola");
+    this.messageContainer = document.querySelector(".game-message");
     // IE only takes one value to remove at a time.
     this.messageContainer.classList.remove("game-won");
     this.messageContainer.classList.remove("game-over");
